@@ -1853,7 +1853,8 @@ class BertForQuestionAnswering(BertPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-
+        
+        print(outputs)
         sequence_output = outputs[0]
 
         logits = self.qa_outputs(sequence_output)
