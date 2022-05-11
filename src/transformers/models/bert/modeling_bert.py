@@ -1856,10 +1856,17 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         )
         
         size_output = outputs.last_hidden_state.size()
-        print(size_output)
+#         print(size_output)
         
+        labels_matrix = torch.randn(46,10)
         
-#         labels_matrix = torch.randn(46,10)
+        outputs_new = torch.zeros(size_output[0], size_output[1], size_output[2] + 10)
+        
+        for i, batch in enumerate(outputs):
+            for j, word in enumerate(batch):
+                lab = labels_matrix[labels[i][j].item()]
+                outputs_new[i][j] = torch.cat((word, lab), -1)
+
         
 #         print(outputs)
         sequence_output = outputs[0]
