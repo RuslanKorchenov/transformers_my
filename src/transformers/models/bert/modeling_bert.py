@@ -1872,7 +1872,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
                 outputs_new[i][j] = torch.cat((word, lab), -1)
 
 #         outputs_new = outputs_new.to('cuda')
-#         print(outputs)
+
         sequence_output = outputs_new
 
         logits = self.qa_outputs(sequence_output)
