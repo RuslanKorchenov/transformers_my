@@ -1855,7 +1855,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
             return_dict=return_dict,
         )
         
-        size_output = outputs.size()
+        size_output = outputs.last_hidden_state.size()
         print(size_o)
         
         
