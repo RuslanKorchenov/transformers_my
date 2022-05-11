@@ -188,8 +188,6 @@ class BertEmbeddings(nn.Module):
         self.position_embeddings = nn.Embedding(config.max_position_embeddings, config.hidden_size)
         self.token_type_embeddings = nn.Embedding(config.type_vocab_size, config.hidden_size)
         
-        print(config.hidden_size)
-        print('not heh\n')
         # self.LayerNorm is not snake-cased to stick with TensorFlow model variable name and be able to load
         # any TensorFlow checkpoint file
         self.LayerNorm = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
@@ -1804,8 +1802,6 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         self.bert = BertModel(config, add_pooling_layer=False)
         self.qa_outputs = nn.Linear(config.hidden_size, config.num_labels)
         
-        print(config.hidden_size)
-        print('hehe\n')
         # Initialize weights and apply final processing
         self.post_init()
 
@@ -1846,8 +1842,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
             are not taken into account for computing the loss.
         """
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-#         print(input_ids)
-#         print('\n')
+
         outputs = self.bert(
             input_ids,
             attention_mask=attention_mask,
@@ -1860,11 +1855,10 @@ class BertForQuestionAnswering(BertPreTrainedModel):
             return_dict=return_dict,
         )
         
-#         print(inputs_embeds)
-#         print('\n')
-#         print(output_hidden_states)
-        print('\n')
-        print(outputs)
+        size_o = outputs.size()
+        print(size_o)
+#         labels_matrix = torch.randn(46,10)
+        
 #         print(labels)
         sequence_output = outputs[0]
 
