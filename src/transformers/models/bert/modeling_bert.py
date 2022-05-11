@@ -1842,7 +1842,8 @@ class BertForQuestionAnswering(BertPreTrainedModel):
             are not taken into account for computing the loss.
         """
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-
+        print(input_ids)
+        print('\n')
         outputs = self.bert(
             input_ids,
             attention_mask=attention_mask,
@@ -1854,8 +1855,8 @@ class BertForQuestionAnswering(BertPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        
-        print(labels)
+        print(input_ids)
+#         print(labels)
         sequence_output = outputs[0]
 
         logits = self.qa_outputs(sequence_output)
