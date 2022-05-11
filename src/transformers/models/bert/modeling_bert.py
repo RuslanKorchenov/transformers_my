@@ -1868,6 +1868,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
                     lab = torch.zeros(10)
                 else:
                     lab = labels_matrix[labels[i][j].item()]
+                lab = lab.to('cuda')
                 outputs_new[i][j] = torch.cat((word, lab), -1)
 
         
