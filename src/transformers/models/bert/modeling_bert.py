@@ -1864,7 +1864,10 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         
         for i, batch in enumerate(outputs):
             for j, word in enumerate(batch):
-                lab = labels_matrix[labels[i][j].item()]
+                if labels[i][j].item() == -100:
+                    lab = torch.zeros(size_output[0],0)
+                else:
+                    lab = labels_matrix[labels[i][j].item()]
                 outputs_new[i][j] = torch.cat((word, lab), -1)
 
         
