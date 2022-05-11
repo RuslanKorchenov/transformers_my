@@ -1862,7 +1862,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         
         outputs_new = torch.zeros(size_output[0], size_output[1], size_output[2] + 10)
         
-        for i, batch in enumerate(outputs):
+        for i, batch in enumerate(outputs[0]):
             for j, word in enumerate(batch):
                 if labels[i][j].item() == -100:
                     lab = torch.zeros(size_output[0],0)
@@ -1872,7 +1872,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
 
         
 #         print(outputs)
-        sequence_output = outputs[0]
+        sequence_output = outputs_new
 
         logits = self.qa_outputs(sequence_output)
         start_logits, end_logits = logits.split(1, dim=-1)
