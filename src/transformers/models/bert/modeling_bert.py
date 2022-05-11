@@ -1855,13 +1855,13 @@ class BertForQuestionAnswering(BertPreTrainedModel):
             return_dict=return_dict,
         )
         
-#         size_output = outputs.size()
-#         print(size_o)
+        size_output = outputs.size()
+        print(size_o)
         
         
 #         labels_matrix = torch.randn(46,10)
         
-        print(outputs)
+#         print(outputs)
         sequence_output = outputs[0]
 
         logits = self.qa_outputs(sequence_output)
