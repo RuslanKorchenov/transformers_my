@@ -1855,7 +1855,12 @@ class BertForQuestionAnswering(BertPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
-        print(input_ids)
+        
+        print(inputs_embeds)
+        print('\n')
+        print(output_hidden_states)
+        print('\n')
+        print(outputs)
 #         print(labels)
         sequence_output = outputs[0]
 
