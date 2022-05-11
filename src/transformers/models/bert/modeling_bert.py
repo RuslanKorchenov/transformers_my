@@ -1829,6 +1829,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+        labels: Optional[torch.Tensor] = None,
     ) -> Union[Tuple[torch.Tensor], QuestionAnsweringModelOutput]:
         r"""
         start_positions (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
@@ -1854,7 +1855,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
             return_dict=return_dict,
         )
         
-        print(outputs)
+        print(labels)
         sequence_output = outputs[0]
 
         logits = self.qa_outputs(sequence_output)
