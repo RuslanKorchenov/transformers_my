@@ -1864,7 +1864,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         
         for i, batch in enumerate(outputs[0]):
             lab = self.emb(labels[i])
-            lab = lab.to('cuda'
+            lab = lab.to('cuda')
             outputs_new[i] = torch.cat((batch, lab), -1)
 #         for i, batch in enumerate(outputs[0]):
 #             for j, word in enumerate(batch):
