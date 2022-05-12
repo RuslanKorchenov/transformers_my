@@ -1799,7 +1799,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         super().__init__(config)
         self.num_labels = config.num_labels
         
-        self.labels_matrix = torch.randn(46,10)
+        self.emb = nn.Embedding(47, 10)
         self.bert = BertModel(config, add_pooling_layer=False)
 #         self.qa_outputs = nn.Linear(config.hidden_size + 10, config.num_labels)
         self.qa_outputs = nn.Linear(config.hidden_size, config.num_labels)
@@ -1858,11 +1858,13 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         
         size_output = outputs.last_hidden_state.size()
 #         print(size_output)
-        print(self.labels_matrix[0])
+#         print(self.labels_matrix[0])
 #         labels_matrix = torch.randn(46,10)
         
-#         outputs_new = torch.zeros(size_output[0], size_output[1], size_output[2] + 10)
-        
+        outputs_new= torch.zeros(size_output[0], size_output[1], size_output[2] + 10)
+        for i, batch in enumerate(outputs[0]):
+            lab = self.emb(labels[i])
+            outputs_new[i]= torch.cat((batch, lab), -1)
 #         for i, batch in enumerate(outputs[0]):
 #             for j, word in enumerate(batch):
 #                 if labels[i][j].item() == -100:
@@ -1874,7 +1876,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
 
 #         outputs_new = outputs_new.to('cuda')
 
-        sequence_output = outputs[0]
+        sequence_output = outputs_new
 
         logits = self.qa_outputs(sequence_output)
         start_logits, end_logits = logits.split(1, dim=-1)
