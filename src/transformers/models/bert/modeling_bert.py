@@ -1863,6 +1863,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         outputs_new= torch.zeros(size_output[0], size_output[1], size_output[2] + 10)
         for i, batch in enumerate(outputs[0]):
             lab = self.emb(labels[i])
+            lab = lab.to('cuda'
             outputs_new[i]= torch.cat((batch, lab), -1)
 #         for i, batch in enumerate(outputs[0]):
 #             for j, word in enumerate(batch):
@@ -1873,7 +1874,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
 # #                 lab = lab.to('cuda')
 #                 outputs_new[i][j] = torch.cat((word, lab), -1)
 
-#         outputs_new = outputs_new.to('cuda')
+        outputs_new = outputs_new.to('cuda')
 
         sequence_output = outputs_new
 
