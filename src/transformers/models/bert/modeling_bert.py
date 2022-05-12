@@ -1801,8 +1801,8 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         
         self.labels_matrix = torch.randn(46,10)
         self.bert = BertModel(config, add_pooling_layer=False)
-        self.qa_outputs = nn.Linear(config.hidden_size + 10, config.num_labels)
-        
+#         self.qa_outputs = nn.Linear(config.hidden_size + 10, config.num_labels)
+        self.qa_outputs = nn.Linear(config.hidden_size, config.num_labels)
         # Initialize weights and apply final processing
         self.post_init()
 
