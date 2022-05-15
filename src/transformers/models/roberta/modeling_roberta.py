@@ -1363,8 +1363,10 @@ class RobertaForTokenClassification(RobertaPreTrainedModel):
         classifier_dropout = (
             config.classifier_dropout if config.classifier_dropout is not None else config.hidden_dropout_prob
         )
+        
+        self.emb = nn.Embedding(47, 10)
         self.dropout = nn.Dropout(classifier_dropout)
-        self.classifier = nn.Linear(config.hidden_size, config.num_labels)
+        self.classifier = nn.Linear(config.hidden_size + 10, config.num_labels)
 
         # Initialize weights and apply final processing
         self.post_init()
@@ -1390,6 +1392,7 @@ class RobertaForTokenClassification(RobertaPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+        labels: Optional[torch.Tensor] = None,
     ) -> Union[Tuple[torch.Tensor], TokenClassifierOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`, *optional*):
@@ -1408,8 +1411,18 @@ class RobertaForTokenClassification(RobertaPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
+        size_output = outputs.last_hidden_state.size()
+        
+        outputs_new = torch.zeros(size_output[0], size_output[1], size_output[2] + 10)
+        
+        for i, batch in enumerate(outputs[0]):
+            lab = self.emb(labels[i])
+            lab = lab.to('cuda')
+            outputs_new[i] = torch.cat((batch, lab), -1)
+        outputs_new = outputs_new.to('cuda')
 
-        sequence_output = outputs[0]
+        sequence_output = outputs_new
+#         sequence_output = outputs[0]
 
         sequence_output = self.dropout(sequence_output)
         logits = self.classifier(sequence_output)
