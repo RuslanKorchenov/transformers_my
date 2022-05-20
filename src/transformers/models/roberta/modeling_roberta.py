@@ -1481,8 +1481,11 @@ class RobertaForQuestionAnswering(RobertaPreTrainedModel):
         super().__init__(config)
         self.num_labels = config.num_labels
 
+        
+        self.emb = nn.Embedding(47, 10)
+
         self.roberta = RobertaModel(config, add_pooling_layer=False)
-        self.qa_outputs = nn.Linear(config.hidden_size, config.num_labels)
+        self.qa_outputs = nn.Linear(config.hidden_size+10, config.num_labels)
 
         # Initialize weights and apply final processing
         self.post_init()
@@ -1509,6 +1512,7 @@ class RobertaForQuestionAnswering(RobertaPreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
+        labels: Optional[torch.Tensor] = None,
     ) -> Union[Tuple[torch.Tensor], QuestionAnsweringModelOutput]:
         r"""
         start_positions (`torch.LongTensor` of shape `(batch_size,)`, *optional*):
@@ -1533,8 +1537,18 @@ class RobertaForQuestionAnswering(RobertaPreTrainedModel):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
+        size_output = outputs.last_hidden_state.size()
+        
+        outputs_new = torch.zeros(size_output[0], size_output[1], size_output[2] + 10)
+        
+        for i, batch in enumerate(outputs[0]):
+            lab = self.emb(labels[i])
+            lab = lab.to('cuda')
+            outputs_new[i] = torch.cat((batch, lab), -1)
+        outputs_new = outputs_new.to('cuda')
 
-        sequence_output = outputs[0]
+        sequence_output = outputs_new
+#         sequence_output = outputs[0]
 
         logits = self.qa_outputs(sequence_output)
         start_logits, end_logits = logits.split(1, dim=-1)
