@@ -1856,7 +1856,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         )
         
         size_output = outputs.last_hidden_state.size()
-#         print(size_output)
+        print(size_output)
 #         print(self.labels_matrix[0])
 #         labels_matrix = torch.randn(46,10)
         
