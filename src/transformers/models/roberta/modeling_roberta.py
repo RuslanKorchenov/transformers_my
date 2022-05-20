@@ -1546,10 +1546,10 @@ class RobertaForQuestionAnswering(RobertaPreTrainedModel):
             lab = lab.to('cuda')
             outputs_new[i] = torch.cat((batch, lab), -1)
         outputs_new = outputs_new.to('cuda')
-
+        print('hi')
         sequence_output = outputs_new
 #         sequence_output = outputs[0]
-
+            
         logits = self.qa_outputs(sequence_output)
         start_logits, end_logits = logits.split(1, dim=-1)
         start_logits = start_logits.squeeze(-1).contiguous()
