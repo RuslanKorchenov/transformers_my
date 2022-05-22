@@ -1799,9 +1799,9 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         super().__init__(config)
         self.num_labels = config.num_labels
         
-        self.emb = nn.Embedding(47, int(size_output[2] * 0.75))
+        self.emb = nn.Embedding(47, int(config.hidden_size * 0.75))
         self.bert = BertModel(config, add_pooling_layer=False)
-        self.qa_outputs = nn.Linear(config.hidden_size + int(size_output[2] * 0.75), config.num_labels)
+        self.qa_outputs = nn.Linear(config.hidden_size + int(config.hidden_size * 0.75), config.num_labels)
         # Initialize weights and apply final processing
         self.post_init()
 
