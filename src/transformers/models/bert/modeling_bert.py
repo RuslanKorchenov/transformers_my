@@ -1799,9 +1799,9 @@ class BertForQuestionAnswering(BertPreTrainedModel):
         super().__init__(config)
         self.num_labels = config.num_labels
         
-        self.emb = nn.Embedding(47, int(50))
+        self.emb = nn.Embedding(47, int(config.hidden_size))
         self.bert = BertModel(config, add_pooling_layer=False)
-        self.qa_outputs = nn.Linear(config.hidden_size + int(50), config.num_labels) #int(config.hidden_size)
+        self.qa_outputs = nn.Linear(config.hidden_size + int(config.hidden_size), config.num_labels) #int(config.hidden_size)
         # Initialize weights and apply final processing
         self.post_init()
 
@@ -1860,7 +1860,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
 #         print(self.labels_matrix[0])
 #         labels_matrix = torch.randn(46,10)
         
-        outputs_new = torch.zeros(size_output[0], size_output[1], size_output[2] + int(50)) #int(size_output[2])
+        outputs_new = torch.zeros(size_output[0], size_output[1], size_output[2] + int(size_output[2])) #int(size_output[2])
         
         for i, batch in enumerate(outputs[0]):
             lab = self.emb(labels[i])
